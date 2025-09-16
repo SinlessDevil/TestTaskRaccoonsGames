@@ -1,5 +1,6 @@
 using Code.UI.Menu.ButtonsNavigation;
 using Code.UI.Menu.Windows;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,6 +10,7 @@ namespace Code.UI.Menu
     {
         [SerializeField] private ButtonNavigationHolder _buttonNavigationHolder;
         [SerializeField] private WindowHolder _windowHolder;
+        [SerializeField] private TMP_Text _tmp;
         
         public void Initialize()
         {
