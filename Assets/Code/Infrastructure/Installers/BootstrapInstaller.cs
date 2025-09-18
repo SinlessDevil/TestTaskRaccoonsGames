@@ -8,7 +8,6 @@ using Code.Services.AudioVibrationFX.StaticData;
 using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.CubeCoordinator;
 using Code.Services.CubeInput;
-using Code.Services.CubeManager;
 using Code.Services.Factories.Game;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Finish;

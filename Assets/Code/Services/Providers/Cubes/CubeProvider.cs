@@ -26,10 +26,7 @@ namespace Code.Services.Providers.Cubes
         public override Cube Get(Vector3 position, Quaternion rotation, Transform parent = null)
         {
             Cube cube = base.Get(position, rotation, parent);
-            
-            // Включаем куб при получении из пула
             cube.Enable();
-            
             return cube;
         }
         

@@ -1,8 +1,8 @@
-namespace Code.Services.CubeManager
+namespace Code.Services.CubeCoordinator
 {
     public interface ICubeCoordinatorService
     {
-        void Initialize();
+       void Initialize();
         void Dispose();
     }
 }

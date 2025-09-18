@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Code.StaticData;
+using Code.StaticData.CubeData;
 using Code.StaticData.Levels;
 using Code.Window;
 
@@ -9,6 +10,7 @@ namespace Code.Services.StaticData
     {
         GameStaticData GameConfig { get; }
         BalanceStaticData Balance { get; }
+        CubeStaticData CubeConfig { get; }
         List<ChapterStaticData> Chapters { get; }
         void LoadData();
         WindowConfig ForWindow(WindowTypeId windowTypeId);

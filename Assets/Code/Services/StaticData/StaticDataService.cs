@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.Services.Factories;
 using Code.StaticData;
+using Code.StaticData.CubeData;
 using Code.StaticData.Levels;
 using Code.Window;
 using UnityEngine;
@@ -13,11 +14,13 @@ namespace Code.Services.StaticData
     {
         private GameStaticData _gameStaticData;
         private BalanceStaticData _balanceStaticData;
+        private CubeStaticData _cubeStaticData;
         private Dictionary<WindowTypeId, WindowConfig> _windowConfigs;
         private List<ChapterStaticData> _chapterStaticDatas = new();
         
         public GameStaticData GameConfig => _gameStaticData;
         public BalanceStaticData Balance => _balanceStaticData;
+        public CubeStaticData CubeConfig => _cubeStaticData;
         public List<ChapterStaticData> Chapters => _chapterStaticDatas;
         
         public void LoadData()
@@ -27,6 +30,9 @@ namespace Code.Services.StaticData
             
             _balanceStaticData = Resources
                 .Load<BalanceStaticData>(ResourcePath.GameBalancePath);
+            
+            _cubeStaticData = Resources
+                .Load<CubeStaticData>(ResourcePath.CubeConfigPath);
             
             _windowConfigs = Resources
                 .Load<WindowStaticData>(ResourcePath.WindowsStaticDataPath)
@@ -45,7 +51,7 @@ namespace Code.Services.StaticData
                 throw new InvalidOperationException("No chapters available.");
 
             int realChapterIndex = (chapterId - 1) % _chapterStaticDatas.Count;
-            var chapter = _chapterStaticDatas[realChapterIndex];
+            ChapterStaticData chapter = _chapterStaticDatas[realChapterIndex];
 
             if (chapter.Levels.Count == 0)
                 throw new InvalidOperationException($"Chapter {realChapterIndex + 1} has no levels.");
@@ -53,7 +59,7 @@ namespace Code.Services.StaticData
             if (levelId < 1 || levelId > chapter.Levels.Count)
                 throw new ArgumentOutOfRangeException(nameof(levelId), $"Level {levelId} is out of range: 1 - {chapter.Levels.Count}");
 
-            var level = chapter.Levels[levelId - 1];
+            LevelStaticData level = chapter.Levels[levelId - 1];
             return level;
         }
         

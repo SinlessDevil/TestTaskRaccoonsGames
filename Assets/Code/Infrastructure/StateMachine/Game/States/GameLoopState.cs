@@ -1,6 +1,6 @@
 using Code.Logic.Cubes;
+using Code.Services.CubeCoordinator;
 using Code.Services.CubeInput;
-using Code.Services.CubeManager;
 using Code.Services.Input;
 using Code.Services.Input.Device;
 using Code.Services.Levels;
@@ -8,7 +8,6 @@ using Code.Services.LocalProgress;
 using Code.Services.Providers;
 using Code.Services.Timer;
 using Code.UI;
-using UnityEngine;
 
 namespace Code.Infrastructure.StateMachine.Game.States
 {
