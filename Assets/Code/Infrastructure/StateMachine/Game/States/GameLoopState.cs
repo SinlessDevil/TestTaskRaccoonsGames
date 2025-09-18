@@ -43,7 +43,6 @@ namespace Code.Infrastructure.StateMachine.Game.States
             
             var cube = Object.FindAnyObjectByType<Cube>();
             _cubeInputService.SetupCube(cube);
-            _cubeInputService.SetBoundaries(-12.5f,12.5f);
             _cubeInputService.Enable();
         }
 

@@ -7,9 +7,11 @@ namespace Code.Services.CubeInput
     {
         private Cube _cube;
         
-        private float _leftPosition = -2f;
-        private float _rightPosition = 2f;
+        private float _leftPosition = -12.5f;
+        private float _rightPosition = 12f;
         private float _smoothSpeed = 8f;
+        private float _pushForce = 65f;
+        private Vector3 _pushDirection = Vector3.forward;
         
         private Vector2 _startTouchPosition;
         private Vector3 _targetPosition;
@@ -85,6 +87,13 @@ namespace Code.Services.CubeInput
         private void OnPointerUp()
         {
             _isPressed = false;
+            PushCube();
+        }
+        
+        private void PushCube()
+        {
+            Vector3 pushVector = _pushDirection * _pushForce;
+            _cube.Rigidbody.AddForce(pushVector, ForceMode.Impulse);
         }
         
         private Vector2 GetNormalizedTouchPosition()
