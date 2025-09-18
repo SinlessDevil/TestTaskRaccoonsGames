@@ -5,6 +5,7 @@ using Code.Services.AudioVibrationFX.Music;
 using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.StaticData;
 using Code.Services.AudioVibrationFX.Vibration;
+using Code.Services.CubeInput;
 using Code.Services.Factories.Game;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Finish;
@@ -18,7 +19,6 @@ using Code.Services.Providers.Widgets;
 using Code.Services.Random;
 using Code.Services.SaveLoad;
 using Code.Services.StaticData;
-using Code.Services.Storage;
 using Code.Services.Timer;
 using Code.Services.Window;
 using UnityEngine;
@@ -62,11 +62,11 @@ namespace Code.Infrastructure.Installers
             Container.BindInterfacesTo<GameFactory>().AsSingle();
             Container.BindInterfacesTo<WindowService>().AsSingle();
             Container.BindInterfacesTo<InputService>().AsSingle();
+            Container.BindInterfacesTo<CubeInputService>().AsSingle();
             Container.BindInterfacesTo<RandomService>().AsSingle();
             Container.BindInterfacesTo<UnifiedSaveLoadFacade>().AsSingle();
             Container.BindInterfacesTo<WidgetProvider>().AsSingle();
             Container.BindInterfacesTo<LevelService>().AsSingle();
-            Container.BindInterfacesTo<StorageService>().AsSingle();
             Container.BindInterfacesTo<TimeService>().AsSingle();
 
             BindDataServices();

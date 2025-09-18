@@ -1,8 +1,11 @@
+using Code.Services.CubeInput;
 using Code.Services.Input;
+using Code.Services.Input.Device;
 using Code.Services.Levels;
 using Code.Services.LocalProgress;
 using Code.Services.Providers.Widgets;
 using Code.Services.Timer;
+using UnityEngine;
 
 namespace Code.Infrastructure.StateMachine.Game.States
 {
@@ -14,6 +17,7 @@ namespace Code.Infrastructure.StateMachine.Game.States
         private readonly ILevelService _levelService;
         private readonly ILevelLocalProgressService _levelLocalProgressService;
         private readonly ITimeService _timeService;
+        private readonly ICubeInputService _cubeInputService;
 
         public GameLoopState(
             IStateMachine<IGameState> gameStateMachine, 
@@ -21,7 +25,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
             IWidgetProvider widgetProvider,
             ILevelService levelService,
             ILevelLocalProgressService levelLocalProgressService,
-            ITimeService timeService)
+            ITimeService timeService,
+            ICubeInputService cubeInputService)
         {
             _gameStateMachine = gameStateMachine;
             _inputService = inputService;
@@ -29,11 +34,17 @@ namespace Code.Infrastructure.StateMachine.Game.States
             _levelService = levelService;
             _levelLocalProgressService = levelLocalProgressService;
             _timeService = timeService;
+            _cubeInputService = cubeInputService;
         }
         
         public void Enter()
         {
+            _inputService.SetInputDevice(new MouseInputDevice());
             
+            var cube = Object.FindAnyObjectByType<Cube>();
+            _cubeInputService.SetupCube(cube);
+            _cubeInputService.SetBoundaries(-12.5f,12.5f);
+            _cubeInputService.Enable();
         }
 
         public void Update()
@@ -43,6 +54,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
 
         public void Exit()
         {
+            _cubeInputService.Disable();
+            
             _inputService.Cleanup();
             _widgetProvider.CleanupPool();
             _levelService.Cleanup();

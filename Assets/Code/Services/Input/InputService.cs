@@ -37,11 +37,7 @@ namespace Code.Services.Input
                 return;
 
             _inputDevice.UpdateInput();
-            
-            if (Direction.magnitude > 0)
-            {
-                InputUpdateEvent?.Invoke();
-            }
+            InputUpdateEvent?.Invoke();
         }
 
         public void Cleanup()
