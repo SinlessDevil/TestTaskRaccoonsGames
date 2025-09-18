@@ -14,7 +14,8 @@ namespace Code.Services.CubeInput
         private Vector2 _startTouchPosition;
         private Vector3 _targetPosition;
         private Vector3 _initialCubePosition;
-            
+        
+        private bool _isFirstTick = true;
         private bool _isPressed;
         
         private readonly IInputService _inputService;
@@ -37,7 +38,6 @@ namespace Code.Services.CubeInput
         public void SetupCube(Cube cube)
         {
             _cube = cube;
-            _targetPosition = _cube.transform.position;
         }
         
         public void SetBoundaries(float leftPosition, float rightPosition)
@@ -70,26 +70,21 @@ namespace Code.Services.CubeInput
             if (_isPressed)
             {
                 UpdateTargetPosition();
+                SmoothMoveCube();
             }
-            
-            SmoothMoveCube();
         }
         
         private void OnPointerDown()
         {
             _isPressed = true;
-            _startTouchPosition = GetNormalizedTouchPosition();
-            
+            _isFirstTick = true;
             _initialCubePosition = _cube.transform.position;
             _targetPosition = _initialCubePosition;
-            
-            Debug.Log($"Swipe started at: {_startTouchPosition}");
         }
         
         private void OnPointerUp()
         {
             _isPressed = false;
-            Debug.Log("Swipe ended");
         }
         
         private Vector2 GetNormalizedTouchPosition()
@@ -102,6 +97,14 @@ namespace Code.Services.CubeInput
         private void UpdateTargetPosition()
         {
             Vector2 currentTouchPosition = GetNormalizedTouchPosition();
+            
+            if (_isFirstTick)
+            {
+                _startTouchPosition = currentTouchPosition;
+                _isFirstTick = false;
+                return;
+            }
+            
             Vector2 swipeDelta = currentTouchPosition - _startTouchPosition;
             float swipeWorldDistance = swipeDelta.x * (_rightPosition - _leftPosition);
             float newWorldX = _initialCubePosition.x + swipeWorldDistance;

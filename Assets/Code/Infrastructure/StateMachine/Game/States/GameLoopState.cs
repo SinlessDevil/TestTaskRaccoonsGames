@@ -55,8 +55,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
         public void Exit()
         {
             _cubeInputService.Disable();
-            
             _inputService.Cleanup();
+            
             _widgetProvider.CleanupPool();
             _levelService.Cleanup();
             _levelLocalProgressService.Cleanup();
