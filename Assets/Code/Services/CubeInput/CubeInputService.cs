@@ -1,3 +1,5 @@
+using System;
+using Code.Logic.Cubes;
 using Code.Services.Input;
 using UnityEngine;
 
@@ -26,22 +28,24 @@ namespace Code.Services.CubeInput
         {
             _inputService = inputService;
         }
-        
+
+        public event Action PushedCubeEvent;
+
         public void Enable()
         {
             SubscribeToInputEvents();
         }
         
-        public void Disable()
+        public void Cleanup()
         {
             UnsubscribeFromInputEvents();
         }
-        
-        public void SetupCube(Cube cube)
+
+        public void SetCube(Cube cube)
         {
             _cube = cube;
         }
-        
+
         public void SetBoundaries(float leftPosition, float rightPosition)
         {
             _leftPosition = leftPosition;
@@ -80,6 +84,7 @@ namespace Code.Services.CubeInput
         {
             _isPressed = true;
             _isFirstTick = true;
+            
             _initialCubePosition = _cube.transform.position;
             _targetPosition = _initialCubePosition;
         }
@@ -87,20 +92,10 @@ namespace Code.Services.CubeInput
         private void OnPointerUp()
         {
             _isPressed = false;
+            
             PushCube();
-        }
-        
-        private void PushCube()
-        {
-            Vector3 pushVector = _pushDirection * _pushForce;
-            _cube.Rigidbody.AddForce(pushVector, ForceMode.Impulse);
-        }
-        
-        private Vector2 GetNormalizedTouchPosition()
-        {
-            Vector3 touchPosition = _inputService.TouchPosition;
-            float normalizedX = (touchPosition.x / Screen.width) - 0.5f;
-            return new Vector2(normalizedX, 0);
+            
+            PushedCubeEvent?.Invoke();
         }
         
         private void UpdateTargetPosition()
@@ -127,6 +122,19 @@ namespace Code.Services.CubeInput
             Vector3 currentPosition = _cube.transform.position;
             Vector3 newPosition = Vector3.Lerp(currentPosition, _targetPosition, _smoothSpeed * Time.deltaTime);
             _cube.transform.position = newPosition;
+        }
+        
+        private void PushCube()
+        {
+            Vector3 pushVector = _pushDirection * _pushForce;
+            _cube.Rigidbody.AddForce(pushVector, ForceMode.Impulse);
+        }
+
+        private Vector2 GetNormalizedTouchPosition()
+        {
+            Vector3 touchPosition = _inputService.TouchPosition;
+            float normalizedX = (touchPosition.x / Screen.width) - 0.5f;
+            return new Vector2(normalizedX, 0);
         }
     }
 }

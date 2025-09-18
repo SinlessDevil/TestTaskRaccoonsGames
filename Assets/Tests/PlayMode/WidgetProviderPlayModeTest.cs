@@ -1,7 +1,7 @@
 using System.Collections;
 using Code.Infrastructure.StateMachine;
 using Code.Infrastructure.StateMachine.Game.States;
-using Code.Services.Providers.Widgets;
+using Code.Services.Providers;
 using Code.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -13,7 +13,7 @@ namespace Tests.PlayMode
 {
     public class WidgetProviderPlayModeTest
     {
-        private IWidgetProvider _provider;
+        private IPoolProvider<Widget> _provider;
 
         [UnitySetUp]
         public IEnumerator SetUp()
@@ -25,7 +25,7 @@ namespace Tests.PlayMode
             var stateMachine = container.Resolve<IStateMachine<IGameState>>();
             yield return stateMachine.Enter<LoadLevelState, string>("Game");
             
-            _provider = container.Resolve<IWidgetProvider>();
+            _provider = container.Resolve<IPoolProvider<Widget>>();
             Assert.IsNotNull(_provider, "WidgetProvider should not be null");
             yield return null;
         }
@@ -49,15 +49,15 @@ namespace Tests.PlayMode
         {
             yield return new WaitForSeconds(5f);
             
-            Widget first = _provider.GetWidget(Vector3.zero, Quaternion.identity);
+            Widget first = _provider.Get(Vector3.zero, Quaternion.identity);
             first.SetText("Test");
             first.SetColor(Color.red);
             first.PlayAnimation();
-            _provider.ReturnWidget(first);
+            _provider.Return(first);
 
             yield return new WaitForSeconds(1f);
 
-            Widget reused = _provider.GetWidget(Vector3.right, Quaternion.identity);
+            Widget reused = _provider.Get(Vector3.right, Quaternion.identity);
             reused.SetText("Test_1");
             reused.SetColor(Color.gray);
             reused.PlayAnimation();

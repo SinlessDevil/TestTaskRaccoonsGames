@@ -1,9 +1,13 @@
+using System;
+using Code.Logic.Cubes;
+
 namespace Code.Services.CubeInput
 {
     public interface ICubeInputService
     {
-        void SetupCube(Cube cube);
+        event Action PushedCubeEvent;
         void Enable();
-        void Disable();
+        void Cleanup();
+        void SetCube(Cube cube);
     }
 }

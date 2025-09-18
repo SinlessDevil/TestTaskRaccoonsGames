@@ -1,11 +1,14 @@
 using Code.Infrastructure.StateMachine;
 using Code.Infrastructure.StateMachine.Game;
 using Code.Infrastructure.StateMachine.Game.States;
+using Code.Logic.Cubes;
 using Code.Services.AudioVibrationFX.Music;
 using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.StaticData;
 using Code.Services.AudioVibrationFX.Vibration;
+using Code.Services.CubeCoordinator;
 using Code.Services.CubeInput;
+using Code.Services.CubeManager;
 using Code.Services.Factories.Game;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Finish;
@@ -15,12 +18,15 @@ using Code.Services.Input;
 using Code.Services.Levels;
 using Code.Services.LocalProgress;
 using Code.Services.PersistenceProgress;
+using Code.Services.Providers;
+using Code.Services.Providers.Cubes;
 using Code.Services.Providers.Widgets;
 using Code.Services.Random;
 using Code.Services.SaveLoad;
 using Code.Services.StaticData;
 using Code.Services.Timer;
 using Code.Services.Window;
+using Code.UI;
 using UnityEngine;
 using Zenject;
 using Application = UnityEngine.Application;
@@ -57,21 +63,38 @@ namespace Code.Infrastructure.Installers
         private void BindServices()
         {
             BindStaticDataService();
+            BindFactories();
+            BindInputsServices();
             
-            Container.BindInterfacesTo<UIFactory>().AsSingle();
-            Container.BindInterfacesTo<GameFactory>().AsSingle();
             Container.BindInterfacesTo<WindowService>().AsSingle();
-            Container.BindInterfacesTo<InputService>().AsSingle();
-            Container.BindInterfacesTo<CubeInputService>().AsSingle();
             Container.BindInterfacesTo<RandomService>().AsSingle();
             Container.BindInterfacesTo<UnifiedSaveLoadFacade>().AsSingle();
-            Container.BindInterfacesTo<WidgetProvider>().AsSingle();
             Container.BindInterfacesTo<LevelService>().AsSingle();
             Container.BindInterfacesTo<TimeService>().AsSingle();
 
+            Container.BindInterfacesTo<CubeCoordinatorService>().AsSingle();
+            
             BindDataServices();
             BindAudioVibrationService();
             BindFinishService();
+        }
+
+        private void BindFactories()
+        {
+            Container.BindInterfacesTo<UIFactory>().AsSingle();
+            Container.BindInterfacesTo<GameFactory>().AsSingle();
+            
+            Container.Bind<IPoolFactory<Widget>>().To<WidgetFactory>().AsSingle();
+            Container.Bind<IPoolProvider<Widget>>().To<WidgetProvider>().AsSingle();
+            
+            Container.Bind<IPoolFactory<Cube>>().To<CubeFactory>().AsSingle();
+            Container.Bind<IPoolProvider<Cube>>().To<CubeProvider>().AsSingle();
+        }
+
+        private void BindInputsServices()
+        {
+            Container.BindInterfacesTo<InputService>().AsSingle();
+            Container.BindInterfacesTo<CubeInputService>().AsSingle();
         }
 
         private void BindAudioVibrationService()

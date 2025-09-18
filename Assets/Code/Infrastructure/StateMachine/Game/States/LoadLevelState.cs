@@ -1,5 +1,4 @@
 ﻿using Code.Services.Factories.UIFactory;
-using Code.Services.Providers.Widgets;
 using Code.UI.Game;
 
 namespace Code.Infrastructure.StateMachine.Game.States
@@ -10,20 +9,17 @@ namespace Code.Infrastructure.StateMachine.Game.States
         private readonly ILoadingCurtain _loadingCurtain;
         private readonly IUIFactory _uiFactory;
         private readonly IStateMachine<IGameState> _gameStateMachine;
-        private readonly IWidgetProvider _widgetProvider;
 
         public LoadLevelState(
             IStateMachine<IGameState> gameStateMachine,
             ISceneLoader sceneLoader,
             ILoadingCurtain loadingCurtain,
-            IUIFactory uiFactory,
-            IWidgetProvider widgetProvider)
+            IUIFactory uiFactory)
         {
             _gameStateMachine = gameStateMachine;
             _sceneLoader = sceneLoader;
             _loadingCurtain = loadingCurtain;
             _uiFactory = uiFactory;
-            _widgetProvider = widgetProvider;
         }
 
         public void Enter(string payload)
@@ -49,13 +45,6 @@ namespace Code.Infrastructure.StateMachine.Game.States
             _uiFactory.CreateUiRoot();
 
             InitHud();
-
-            InitProviders();
-        }
-
-        private void InitProviders()
-        {
-            _widgetProvider.CreatePoolWidgets();
         }
 
         private void InitHud()

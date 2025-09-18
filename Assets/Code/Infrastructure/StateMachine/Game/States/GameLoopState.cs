@@ -1,10 +1,13 @@
+using Code.Logic.Cubes;
 using Code.Services.CubeInput;
+using Code.Services.CubeManager;
 using Code.Services.Input;
 using Code.Services.Input.Device;
 using Code.Services.Levels;
 using Code.Services.LocalProgress;
-using Code.Services.Providers.Widgets;
+using Code.Services.Providers;
 using Code.Services.Timer;
+using Code.UI;
 using UnityEngine;
 
 namespace Code.Infrastructure.StateMachine.Game.States
@@ -13,36 +16,54 @@ namespace Code.Infrastructure.StateMachine.Game.States
     {
         private readonly IStateMachine<IGameState> _gameStateMachine;
         private readonly IInputService _inputService;
-        private readonly IWidgetProvider _widgetProvider;
         private readonly ILevelService _levelService;
         private readonly ILevelLocalProgressService _levelLocalProgressService;
         private readonly ITimeService _timeService;
         private readonly ICubeInputService _cubeInputService;
+        private readonly IPoolProvider<Widget> _widgetProvider;
+        private readonly IPoolProvider<Cube> _cubeProvider;
+        private readonly ICubeCoordinatorService _cubeCoordinatorService;
 
         public GameLoopState(
             IStateMachine<IGameState> gameStateMachine, 
-            IInputService inputService,
-            IWidgetProvider widgetProvider,
             ILevelService levelService,
             ILevelLocalProgressService levelLocalProgressService,
             ITimeService timeService,
-            ICubeInputService cubeInputService)
+            IInputService inputService,
+            ICubeInputService cubeInputService,
+            IPoolProvider<Widget> widgetProvider,
+            IPoolProvider<Cube> cubeProvider,
+            ICubeCoordinatorService cubeCoordinatorService)
         {
             _gameStateMachine = gameStateMachine;
-            _inputService = inputService;
-            _widgetProvider = widgetProvider;
             _levelService = levelService;
             _levelLocalProgressService = levelLocalProgressService;
             _timeService = timeService;
+            _inputService = inputService;
             _cubeInputService = cubeInputService;
+            _widgetProvider = widgetProvider;
+            _cubeProvider = cubeProvider;
+            _cubeCoordinatorService = cubeCoordinatorService;
         }
         
         public void Enter()
         {
-            _inputService.SetInputDevice(new MouseInputDevice());
+            _cubeCoordinatorService.Initialize();
             
-            var cube = Object.FindAnyObjectByType<Cube>();
-            _cubeInputService.SetupCube(cube);
+            InitPools();
+
+            InitInputs();
+        }
+
+        private void InitPools()
+        {
+            _widgetProvider.CreatePool();
+            _cubeProvider.CreatePool();
+        }
+        
+        private void InitInputs()
+        {
+            _inputService.SetInputDevice(new MouseInputDevice());
             _cubeInputService.Enable();
         }
 
@@ -53,10 +74,14 @@ namespace Code.Infrastructure.StateMachine.Game.States
 
         public void Exit()
         {
-            _cubeInputService.Disable();
-            _inputService.Cleanup();
+            _cubeCoordinatorService.Dispose();
             
             _widgetProvider.CleanupPool();
+            _cubeProvider.CleanupPool();
+            
+            _cubeInputService.Cleanup();
+            _inputService.Cleanup();
+            
             _levelService.Cleanup();
             _levelLocalProgressService.Cleanup();
             
