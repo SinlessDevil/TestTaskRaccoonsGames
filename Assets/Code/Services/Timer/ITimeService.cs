@@ -10,5 +10,6 @@ namespace Code.Services.Timer
         void SimpleMode();
         void Pause();
         void ResetTimer();
+        bool IsPause { get; }
     }
 }

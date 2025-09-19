@@ -2,10 +2,10 @@ using System;
 using Code.Logic.Cubes;
 using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.Vibration;
-using Code.Services.Factories.UIFactory;
 using Code.Services.Input;
 using Code.Services.Input.DeadZone;
 using Code.Services.StaticData;
+using Code.Services.Timer;
 using Code.StaticData.CubeData;
 using UnityEngine;
 
@@ -26,23 +26,23 @@ namespace Code.Services.CubeInput
         private readonly IStaticDataService _staticDataService;
         private readonly ISoundService _soundService;
         private readonly IVibrationService _vibrationService;
-        private readonly IUIFactory _uiFactory;
         private readonly IInputDeadZoneService _deadZoneService;
+        private readonly ITimeService _timeService;
 
         public CubeInputService(
             IInputService inputService, 
             IStaticDataService staticDataService,
             ISoundService soundService,
             IVibrationService vibrationService,
-            IUIFactory uiFactory,
-            IInputDeadZoneService deadZoneService)
+            IInputDeadZoneService deadZoneService,
+            ITimeService timeService)
         {
             _inputService = inputService;
             _staticDataService = staticDataService;
             _soundService = soundService;
             _vibrationService = vibrationService;
-            _uiFactory = uiFactory;
             _deadZoneService = deadZoneService;
+            _timeService = timeService;
         }
 
         public event Action PushedCubeEvent;
@@ -88,7 +88,7 @@ namespace Code.Services.CubeInput
         private void OnPointerDown()
         {
             Vector3 touchPosition = _inputService.TouchPosition;
-            if (!_deadZoneService.CanTouch(touchPosition))
+            if (!_deadZoneService.CanTouch(touchPosition) || _timeService.IsPause)
                 return;
             
             _isPressed = true;
@@ -100,8 +100,7 @@ namespace Code.Services.CubeInput
         
         private void OnPointerUp()
         {
-            Vector3 touchPosition = _inputService.TouchPosition;
-            if (!_deadZoneService.CanTouch(touchPosition))
+            if(!_isPressed)
                 return;
             
             _isPressed = false;

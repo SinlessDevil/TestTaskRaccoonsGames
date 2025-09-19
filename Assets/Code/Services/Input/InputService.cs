@@ -18,8 +18,6 @@ namespace Code.Services.Input
         public event Action PointerDownEvent;
         public event Action PointerUpEvent;
         public event Action InputUpdateEvent;
-
-        private bool _isEnable;
         
         public void SetInputDevice(IInputDevice inputDevice)
         {
@@ -35,7 +33,7 @@ namespace Code.Services.Input
 
         public void Tick()
         {
-            if (_inputDevice == null || !_isEnable)
+            if (_inputDevice == null)
                 return;
 
             _inputDevice.UpdateInput();
@@ -61,28 +59,10 @@ namespace Code.Services.Input
             inputDevice.PointerUpEvent -= OnPointerUp;
         }
 
-        private void OnTap(Vector2 position)
-        {
-            if(!_isEnable)
-                return;
-            
-            TapEvent?.Invoke(position);
-        }
+        private void OnTap(Vector2 position) => TapEvent?.Invoke(position);
 
-        private void OnPointerDown()
-        {
-            if(!_isEnable)
-                return;
-            
-            PointerDownEvent?.Invoke();
-        }
+        private void OnPointerDown() => PointerDownEvent?.Invoke();
 
-        private void OnPointerUp()
-        {
-            if(!_isEnable)
-                return;
-            
-            PointerUpEvent?.Invoke();
-        }
+        private void OnPointerUp() => PointerUpEvent?.Invoke();
     }
 }

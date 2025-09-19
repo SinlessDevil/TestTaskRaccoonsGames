@@ -9,7 +9,7 @@ using Code.Services.Levels;
 using Code.Services.LocalProgress;
 using Code.Services.Providers;
 using Code.Services.Timer;
-using Code.Services.Finish;
+using Code.Logic.Triggers;
 
 namespace Code.Infrastructure.StateMachine.Game.States
 {
@@ -53,11 +53,10 @@ namespace Code.Infrastructure.StateMachine.Game.States
         public void Enter()
         {
             _cubeCoordinatorService.Initialize();
-            _finishService.Initialize();
             
             InitPools();
-
             InitInputs();
+            InitDefeatTriggers();
         }
 
         private void InitPools()
@@ -70,6 +69,12 @@ namespace Code.Infrastructure.StateMachine.Game.States
         {
             _inputService.SetInputDevice(new MouseInputDevice());
             _cubeInputService.Enable();
+        }
+        
+        private void InitDefeatTriggers()
+        {
+            DefeatTrigger[] defeatTriggers = UnityEngine.Object.FindObjectsOfType<DefeatTrigger>();
+            _finishService.Initialize(defeatTriggers);
         }
 
         public void Update()

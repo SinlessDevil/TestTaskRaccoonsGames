@@ -2,21 +2,17 @@ using Code.StaticData.Input;
 using UnityEditor;
 using UnityEngine;
 
-namespace Code.Editor.Tools
+namespace Code.Editor.DeathZone
 {
     public class DeadZoneConfigTool : EditorWindow
     {
         private DeadZoneStaticData _deadZoneConfig;
         private Vector2 _scrollPosition;
-        
-        // Preview settings
         private bool _showPreview = true;
         private Color _workingAreaColor = new Color(0f, 1f, 0f, 0.3f);
         private Color _deadZoneColor = new Color(1f, 0f, 0f, 0.3f);
-        
-        // Screen simulation
         private Vector2 _simulatedScreenSize = new Vector2(1920, 1080);
-        private Vector2 _previewSize = new Vector2(400, 225); // 16:9 aspect ratio
+        private Vector2 _previewSize = new Vector2(400, 225);
         
         [MenuItem("Tools/Dead Zone Config")]
         public static void ShowWindow()
@@ -90,28 +86,24 @@ namespace Code.Editor.Tools
             
             EditorGUI.BeginChangeCheck();
             
-            // Left boundary
             _deadZoneConfig.WorkingAreaLeft = EditorGUILayout.Slider(
                 "Left Boundary", 
                 _deadZoneConfig.WorkingAreaLeft, 
                 0f, 
                 _deadZoneConfig.WorkingAreaRight - 0.01f);
             
-            // Right boundary
             _deadZoneConfig.WorkingAreaRight = EditorGUILayout.Slider(
                 "Right Boundary", 
                 _deadZoneConfig.WorkingAreaRight, 
                 _deadZoneConfig.WorkingAreaLeft + 0.01f, 
                 1f);
             
-            // Bottom boundary
             _deadZoneConfig.WorkingAreaBottom = EditorGUILayout.Slider(
                 "Bottom Boundary", 
                 _deadZoneConfig.WorkingAreaBottom, 
                 0f, 
                 _deadZoneConfig.WorkingAreaTop - 0.01f);
             
-            // Top boundary
             _deadZoneConfig.WorkingAreaTop = EditorGUILayout.Slider(
                 "Top Boundary", 
                 _deadZoneConfig.WorkingAreaTop, 
@@ -126,7 +118,6 @@ namespace Code.Editor.Tools
             
             EditorGUILayout.Space();
             
-            // Show percentages
             EditorGUILayout.LabelField("Area Information", EditorStyles.boldLabel);
             EditorGUI.indentLevel++;
             
@@ -151,20 +142,15 @@ namespace Code.Editor.Tools
             
             if (_showPreview)
             {
-                // Preview settings
                 _simulatedScreenSize = EditorGUILayout.Vector2Field("Simulated Screen Size", _simulatedScreenSize);
                 _workingAreaColor = EditorGUILayout.ColorField("Working Area Color", _workingAreaColor);
                 _deadZoneColor = EditorGUILayout.ColorField("Dead Zone Color", _deadZoneColor);
                 
                 EditorGUILayout.Space();
                 
-                // Calculate preview rect
                 Rect previewRect = GUILayoutUtility.GetRect(_previewSize.x, _previewSize.y);
-                
-                // Draw background (dead zone)
                 EditorGUI.DrawRect(previewRect, _deadZoneColor);
                 
-                // Calculate working area rect
                 Rect workingRect = new Rect(
                     previewRect.x + previewRect.width * _deadZoneConfig.WorkingAreaLeft,
                     previewRect.y + previewRect.height * (1f - _deadZoneConfig.WorkingAreaTop),
@@ -172,13 +158,9 @@ namespace Code.Editor.Tools
                     previewRect.height * (_deadZoneConfig.WorkingAreaTop - _deadZoneConfig.WorkingAreaBottom)
                 );
                 
-                // Draw working area
                 EditorGUI.DrawRect(workingRect, _workingAreaColor);
-                
-                // Draw border
                 GUI.Box(previewRect, "", EditorStyles.helpBox);
                 
-                // Labels
                 GUI.Label(new Rect(previewRect.x + 5, previewRect.y + 5, 100, 20), "Dead Zone", EditorStyles.miniLabel);
                 GUI.Label(new Rect(workingRect.x + 5, workingRect.y + 5, 100, 20), "Working Area", EditorStyles.miniLabel);
             }
@@ -206,7 +188,7 @@ namespace Code.Editor.Tools
                 _deadZoneConfig.WorkingAreaLeft = 0f;
                 _deadZoneConfig.WorkingAreaRight = 1f;
                 _deadZoneConfig.WorkingAreaBottom = 0f;
-                _deadZoneConfig.WorkingAreaTop = 0.85f; // 15% top for UI
+                _deadZoneConfig.WorkingAreaTop = 0.85f;
                 EditorUtility.SetDirty(_deadZoneConfig);
             }
             
@@ -214,8 +196,8 @@ namespace Code.Editor.Tools
             {
                 _deadZoneConfig.WorkingAreaLeft = 0f;
                 _deadZoneConfig.WorkingAreaRight = 1f;
-                _deadZoneConfig.WorkingAreaBottom = 0.1f; // 10% bottom
-                _deadZoneConfig.WorkingAreaTop = 0.85f; // 15% top
+                _deadZoneConfig.WorkingAreaBottom = 0.1f;
+                _deadZoneConfig.WorkingAreaTop = 0.85f;
                 EditorUtility.SetDirty(_deadZoneConfig);
             }
             

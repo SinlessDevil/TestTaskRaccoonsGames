@@ -9,6 +9,8 @@ namespace Code.Services.Timer
         private float _elapsedTime;
         private bool _isRunning;
 
+        public bool IsPause => Time.timeScale == 0;
+        
         public void StartTimer()
         {
             _startTime = Time.unscaledTime - _elapsedTime;
