@@ -1,5 +1,7 @@
 using Code.Logic.Cubes;
 using Code.Logic.Particles;
+using Code.Services.AudioVibrationFX.Sound;
+using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.Providers;
 using Code.Services.StaticData;
 using Code.StaticData.CubeData;
@@ -12,15 +14,21 @@ namespace Code.Services.CubeMerge
         private readonly IPoolProvider<Cube> _cubePoolProvider;
         private readonly IPoolProvider<ParticleHolder> _particlePoolProvider;
         private readonly IStaticDataService _staticDataService;
+        private readonly ISoundService _soundService;
+        private readonly IVibrationService _vibrationService;
 
         public CubeMergeService(
             IPoolProvider<Cube> cubePoolProvider,
             IPoolProvider<ParticleHolder> particlePoolProvider,
-            IStaticDataService staticDataService)
+            IStaticDataService staticDataService,
+            ISoundService soundService,
+            IVibrationService vibrationService)
         {
             _cubePoolProvider = cubePoolProvider;
             _particlePoolProvider = particlePoolProvider;
             _staticDataService = staticDataService;
+            _soundService = soundService;
+            _vibrationService = vibrationService;
         }
 
         public void MergeCubes(Cube currentCube, Cube targetCube)
@@ -42,6 +50,8 @@ namespace Code.Services.CubeMerge
             ApplyMergePhysics(newCube);
             
             PlayExplosionEffect(mergePosition,newColor);
+            _soundService.PlaySound(Sound2DType.Merge);
+            _vibrationService.Play(VibrationType.SuccessPreset);
         }
 
         private Vector3 CalculateMergePosition(Cube currentCube, Cube targetCube)

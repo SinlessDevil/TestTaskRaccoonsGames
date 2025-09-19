@@ -1,7 +1,10 @@
 using System;
 using Code.Logic.Cubes;
+using Code.Services.AudioVibrationFX.Sound;
+using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.Input;
 using Code.Services.StaticData;
+using Code.StaticData.CubeData;
 using UnityEngine;
 
 namespace Code.Services.CubeInput
@@ -9,12 +12,6 @@ namespace Code.Services.CubeInput
     public class CubeInputService : ICubeInputService
     {
         private Cube _cube;
-        
-        private float _leftPosition;
-        private float _rightPosition;
-        private float _smoothSpeed;
-        private float _pushForce;
-        private Vector3 _pushDirection;
         
         private Vector2 _startTouchPosition;
         private Vector3 _targetPosition;
@@ -25,23 +22,19 @@ namespace Code.Services.CubeInput
         
         private readonly IInputService _inputService;
         private readonly IStaticDataService _staticDataService;
-        
-        public CubeInputService(IInputService inputService, IStaticDataService staticDataService)
+        private readonly ISoundService _soundService;
+        private readonly IVibrationService _vibrationService;
+
+        public CubeInputService(
+            IInputService inputService, 
+            IStaticDataService staticDataService,
+            ISoundService soundService,
+            IVibrationService vibrationService)
         {
             _inputService = inputService;
             _staticDataService = staticDataService;
-            
-            InitializeFromStaticData();
-        }
-        
-        private void InitializeFromStaticData()
-        {
-            var cubeConfig = _staticDataService.CubeStaticData;
-            _leftPosition = cubeConfig.InputLeftBoundary;
-            _rightPosition = cubeConfig.InputRightBoundary;
-            _smoothSpeed = cubeConfig.InputSmoothSpeed;
-            _pushForce = cubeConfig.InputPushForce;
-            _pushDirection = cubeConfig.InputPushDirection;
+            _soundService = soundService;
+            _vibrationService = vibrationService;
         }
 
         public event Action PushedCubeEvent;
@@ -60,33 +53,22 @@ namespace Code.Services.CubeInput
         {
             _cube = cube;
         }
-
-        public void SetBoundaries(float leftPosition, float rightPosition)
-        {
-            _leftPosition = leftPosition;
-            _rightPosition = rightPosition;
-        }
-        
-        public void SetSmoothSpeed(float smoothSpeed)
-        {
-            _smoothSpeed = Mathf.Max(0.1f, smoothSpeed);
-        }
         
         private void SubscribeToInputEvents()
         {
             _inputService.PointerDownEvent += OnPointerDown;
             _inputService.PointerUpEvent += OnPointerUp;
-            _inputService.InputUpdateEvent += Tick;
+            _inputService.InputUpdateEvent += OnUpdateInput;
         }
         
         private void UnsubscribeFromInputEvents()
         {
             _inputService.PointerDownEvent -= OnPointerDown;
             _inputService.PointerUpEvent -= OnPointerUp;
-            _inputService.InputUpdateEvent -= Tick;
+            _inputService.InputUpdateEvent -= OnUpdateInput;
         }
         
-        public void Tick()
+        private void OnUpdateInput()
         {
             if (_isPressed)
             {
@@ -111,6 +93,9 @@ namespace Code.Services.CubeInput
             PushCube();
             
             PushedCubeEvent?.Invoke();
+            
+            _soundService.PlaySound(Sound2DType.Push);
+            _vibrationService.Play(VibrationType.SuccessPreset);
         }
         
         private void UpdateTargetPosition()
@@ -125,23 +110,23 @@ namespace Code.Services.CubeInput
             }
             
             Vector2 swipeDelta = currentTouchPosition - _startTouchPosition;
-            float swipeWorldDistance = swipeDelta.x * (_rightPosition - _leftPosition);
+            float swipeWorldDistance = swipeDelta.x * (CubeStaticData.InputRightBoundary - CubeStaticData.InputLeftBoundary);
             float newWorldX = _initialCubePosition.x + swipeWorldDistance;
             
-            newWorldX = Mathf.Clamp(newWorldX, _leftPosition, _rightPosition);
+            newWorldX = Mathf.Clamp(newWorldX, CubeStaticData.InputLeftBoundary, CubeStaticData.InputRightBoundary);
             _targetPosition = new Vector3(newWorldX, _initialCubePosition.y, _initialCubePosition.z);
         }
         
         private void SmoothMoveCube()
         {
             Vector3 currentPosition = _cube.transform.position;
-            Vector3 newPosition = Vector3.Lerp(currentPosition, _targetPosition, _smoothSpeed * Time.deltaTime);
+            Vector3 newPosition = Vector3.Lerp(currentPosition, _targetPosition, CubeStaticData.InputSmoothSpeed * Time.deltaTime);
             _cube.transform.position = newPosition;
         }
         
         private void PushCube()
         {
-            Vector3 pushVector = _pushDirection * _pushForce;
+            Vector3 pushVector = CubeStaticData.InputPushForce * CubeStaticData.InputPushDirection;
             _cube.Rigidbody.AddForce(pushVector, ForceMode.Impulse);
         }
 
@@ -151,5 +136,7 @@ namespace Code.Services.CubeInput
             float normalizedX = (touchPosition.x / Screen.width) - 0.5f;
             return new Vector2(normalizedX, 0);
         }
+
+        private CubeStaticData CubeStaticData => _staticDataService.CubeStaticData;
     }
 }

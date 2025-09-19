@@ -105,11 +105,15 @@ namespace Code.Editor.AudioVibration
         private void GenerateEnumFileBase(string enumPath, string enumName, string nameFolder, 
             List<SoundData> soundList, TypeSound typeSound)
         {
+            Debug.Log($"Generating enum for TypeSound: {typeSound}, with {soundList.Count} sounds");
+            
             var names = soundList
                 .Where(s => !string.IsNullOrWhiteSpace(s.Name))
                 .Select(s => s.Name.Replace(" ", "_").Replace("-", "_").Replace(".", "_").Trim())
                 .Distinct()
                 .ToList();
+                
+            Debug.Log($"Sanitized names: {string.Join(", ", names)}");
 
             using (var writer = new StreamWriter(enumPath))
             {
@@ -135,19 +139,54 @@ namespace Code.Editor.AudioVibration
             {
                 var enumNameSanitized = sound.Name.Replace(" ", "_").Replace("-", "_").Replace(".", "_").Trim();
 
-                switch (typeSound)
+                try
                 {
-                    case TypeSound.Sound2D when Enum.TryParse(enumNameSanitized, out Sound2DType sound2DType):
-                        sound.Sound2DType = sound2DType;
-                        break;
-                    case TypeSound.Sound3D when Enum.TryParse(enumNameSanitized, out Sound3DType sound3DType):
-                        sound.Sound3DType = sound3DType;
-                        break;
-                    case TypeSound.Music when Enum.TryParse(enumNameSanitized, out MusicType musicType):
-                        sound.MusicType = musicType;
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(typeSound), typeSound, null);
+                    switch (typeSound)
+                    {
+                        case TypeSound.Sound2D:
+                            if (Enum.TryParse(enumNameSanitized, out Sound2DType sound2DType))
+                            {
+                                sound.Sound2DType = sound2DType;
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Could not parse '{enumNameSanitized}' as Sound2DType. Setting to Unknown.");
+                                sound.Sound2DType = Sound2DType.Unknown;
+                            }
+                            break;
+                            
+                        case TypeSound.Sound3D:
+                            if (Enum.TryParse(enumNameSanitized, out Sound3DType sound3DType))
+                            {
+                                sound.Sound3DType = sound3DType;
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Could not parse '{enumNameSanitized}' as Sound3DType. Setting to Unknown.");
+                                sound.Sound3DType = Sound3DType.Unknown;
+                            }
+                            break;
+                            
+                        case TypeSound.Music:
+                            if (Enum.TryParse(enumNameSanitized, out MusicType musicType))
+                            {
+                                sound.MusicType = musicType;
+                            }
+                            else
+                            {
+                                Debug.LogWarning($"Could not parse '{enumNameSanitized}' as MusicType. Setting to Unknown.");
+                                sound.MusicType = MusicType.Unknown;
+                            }
+                            break;
+                            
+                        default:
+                            Debug.LogError($"Unexpected TypeSound value: {typeSound}");
+                            break;
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                    Debug.LogError($"Error processing sound '{sound.Name}' with type '{typeSound}': {ex.Message}");
                 }
             }
 

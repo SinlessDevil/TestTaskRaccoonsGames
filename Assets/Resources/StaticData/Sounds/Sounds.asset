@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Sounds
   m_EditorClassIdentifier: 
   serializationData:
-    SerializedFormat: 2
+    SerializedFormat: 0
     SerializedBytes: 
     ReferencedUnityObjects: []
     SerializedBytesString: 
@@ -24,10 +24,42 @@ MonoBehaviour:
   Sounds2DData:
   - Name: Click
     Clip: {fileID: 8300000, guid: ca1fc5df9d7db6247a01f1ba4ad257ee, type: 3}
-    Volume: 1
+    Volume: 0.5
     Loop: 0
     PlayOnAwake: 0
     Sound2DType: 0
+    Sound3DType: -1
+    MusicType: -1
+  - Name: Merge
+    Clip: {fileID: 8300000, guid: e02ded411da16cb4e8f5fb229b372afc, type: 3}
+    Volume: 0.2
+    Loop: 0
+    PlayOnAwake: 0
+    Sound2DType: 1
+    Sound3DType: -1
+    MusicType: -1
+  - Name: Push
+    Clip: {fileID: 8300000, guid: 12e551f2915e5714fa580f9ac35d6543, type: 3}
+    Volume: 0.3
+    Loop: 0
+    PlayOnAwake: 0
+    Sound2DType: 2
+    Sound3DType: -1
+    MusicType: -1
+  - Name: Win
+    Clip: {fileID: 8300000, guid: e64033db85ceab441829f1eb0ed68990, type: 3}
+    Volume: 0.7
+    Loop: 0
+    PlayOnAwake: 0
+    Sound2DType: 3
+    Sound3DType: -1
+    MusicType: -1
+  - Name: lose
+    Clip: {fileID: 8300000, guid: d80b8a6beb49a09468d04de9c6990fb7, type: 3}
+    Volume: 0.3
+    Loop: 0
+    PlayOnAwake: 0
+    Sound2DType: 4
     Sound3DType: -1
     MusicType: -1
   Sounds3DData: []

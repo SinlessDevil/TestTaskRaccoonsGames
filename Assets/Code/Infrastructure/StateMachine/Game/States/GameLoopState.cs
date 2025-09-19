@@ -8,7 +8,6 @@ using Code.Services.Levels;
 using Code.Services.LocalProgress;
 using Code.Services.Providers;
 using Code.Services.Timer;
-using Code.UI;
 
 namespace Code.Infrastructure.StateMachine.Game.States
 {

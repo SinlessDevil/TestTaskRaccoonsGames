@@ -35,6 +35,8 @@ namespace Code.Services.Providers.Cubes
             if (cube != null)
             {
                 cube.Disable();
+                cube.transform.position = Vector3.zero;
+                cube.transform.rotation = Quaternion.identity;
             }
             base.Return(cube);
         }

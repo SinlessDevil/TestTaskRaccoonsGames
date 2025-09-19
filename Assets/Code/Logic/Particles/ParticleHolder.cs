@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Code.Services.Providers;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 using Zenject;
 
 namespace Code.Logic.Particles
@@ -31,7 +31,7 @@ namespace Code.Logic.Particles
         
         private void SetParticleColor(Color color)
         {
-            var main = _mergeParticleSystem.main;
+            ParticleSystem.MainModule main = _mergeParticleSystem.main;
             main.startColor = color;
         }
         

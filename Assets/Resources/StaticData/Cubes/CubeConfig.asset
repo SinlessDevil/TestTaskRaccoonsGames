@@ -12,33 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fef453cdd44e0a448828a0af610c1484, type: 3}
   m_Name: CubeConfig
   m_EditorClassIdentifier: 
-  SpawnChances:
-  - Value: 2
-    Chance: 75
-  - Value: 4
-    Chance: 25
-  ValueColors:
-  - Value: 2
-    Color: {r: 0, g: 0.7254902, b: 1, a: 1}
-  - Value: 4
-    Color: {r: 0, g: 0.2901961, b: 1, a: 1}
-  - Value: 8
-    Color: {r: 0.54509807, g: 0, b: 1, a: 1}
-  - Value: 16
-    Color: {r: 0.98823535, g: 0, b: 1, a: 1}
-  - Value: 32
-    Color: {r: 1, g: 0, b: 0.7607844, a: 1}
-  - Value: 128
-    Color: {r: 1, g: 0, b: 0.4431373, a: 1}
-  - Value: 256
-    Color: {r: 1, g: 0, b: 0.007843138, a: 1}
-  - Value: 512
-    Color: {r: 1, g: 0.30588236, b: 0, a: 1}
-  - Value: 1024
-    Color: {r: 1, g: 0.46274513, b: 0, a: 1}
-  - Value: 2048
-    Color: {r: 0.7176471, g: 0.62352943, b: 0, a: 1}
-  - Value: 4096
-    Color: {r: 0.5176471, g: 0.6901961, b: 0, a: 1}
-  - Value: 8192
-    Color: {r: 0, g: 0, b: 0, a: 1}
+  MergePushForce: 25
+  MergePushDirection: {x: 0, y: 0.7, z: 0.7}
+  MergeRandomForceMin: -20
+  MergeRandomForceMax: -10
+  MergeRandomForcePositiveMin: 10
+  MergeRandomForcePositiveMax: 20
+  MergeTorqueMin: -5
+  MergeTorqueMax: 5
+  InputLeftBoundary: -13
+  InputRightBoundary: 13
+  InputSmoothSpeed: 10
+  InputPushForce: 80
+  InputPushDirection: {x: 0, y: 0, z: 1}
