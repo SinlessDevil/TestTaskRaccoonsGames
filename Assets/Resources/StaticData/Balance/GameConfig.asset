@@ -24,4 +24,4 @@ MonoBehaviour:
   LogStackTraceRelease:
     Info: 0
     Errors: 1
-  DebugMode: 1
+  DebugMode: 0

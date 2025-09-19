@@ -85,7 +85,9 @@ namespace Code.Services.Finish
         
         private void OnMaxMergedNumberUpdated(int maxMergedNumber)
         {
-            if (LevelStaticData.IsVictoryAchieved(maxMergedNumber)) 
+            int highestTarget = LevelStaticData.GetHighestTarget();
+            
+            if (maxMergedNumber >= highestTarget && highestTarget > 0) 
                 Win();
         }
         

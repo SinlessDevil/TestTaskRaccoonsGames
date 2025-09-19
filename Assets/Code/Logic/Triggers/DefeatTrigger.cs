@@ -10,7 +10,7 @@ namespace Code.Logic.Triggers
         
         private void OnTriggerEnter(Collider other)
         {
-            if (other.TryGetComponent<Cube>(out Cube cube)) 
+            if (other.TryGetComponent(out Cube cube)) 
                 LosedEvent?.Invoke();
         }
     }

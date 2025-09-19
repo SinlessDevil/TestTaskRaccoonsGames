@@ -57,11 +57,9 @@ namespace Code.Services.CubeInput
             UnsubscribeFromInputEvents();
         }
 
-        public void SetCube(Cube cube)
-        {
+        public void SetCube(Cube cube) => 
             _cube = cube;
-        }
-        
+
         private void SubscribeToInputEvents()
         {
             _inputService.PointerDownEvent += OnPointerDown;

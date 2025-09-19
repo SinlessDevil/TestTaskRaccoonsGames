@@ -15,10 +15,8 @@ MonoBehaviour:
   SpawnChances:
   - Value: 2
     Chance: 75
-  - Value: 2
+  - Value: 4
     Chance: 25
   SpawnDelay: 0.25
   InitialSpawnDelay: 0
   SpawnPosition: {x: 0, y: 0, z: 0}
-  SpawnHeight: 0
-  SpawnZOffset: 0
