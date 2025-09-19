@@ -4,6 +4,7 @@ using System.Linq;
 using Code.Services.Factories;
 using Code.StaticData;
 using Code.StaticData.CubeData;
+using Code.StaticData.Input;
 using Code.StaticData.Levels;
 using Code.Window;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace Code.Services.StaticData
         private CubeStaticData _cubeStaticData;
         private CubeColorStaticData _cubeColorStaticData;
         private CubeSpawnStaticData _cubeSpawnStaticData;
+        private DeadZoneStaticData _deadZoneStaticData;
         private Dictionary<WindowTypeId, WindowConfig> _windowConfigs;
         private List<ChapterStaticData> _chapterStaticDatas = new();
         
@@ -25,6 +27,7 @@ namespace Code.Services.StaticData
         public CubeStaticData CubeStaticData => _cubeStaticData;
         public CubeColorStaticData CubeColorStaticData => _cubeColorStaticData;
         public CubeSpawnStaticData CubeSpawnStaticData => _cubeSpawnStaticData;
+        public DeadZoneStaticData DeadZoneConfig => _deadZoneStaticData;
         public List<ChapterStaticData> Chapters => _chapterStaticDatas;
         
         public void LoadData()
@@ -43,6 +46,9 @@ namespace Code.Services.StaticData
             
             _cubeSpawnStaticData = Resources
                 .Load<CubeSpawnStaticData>(ResourcePath.CubeSpawnConfigPath);
+            
+            _deadZoneStaticData = Resources
+                .Load<DeadZoneStaticData>(ResourcePath.DeadZoneConfigPath);
             
             _windowConfigs = Resources
                 .Load<WindowStaticData>(ResourcePath.WindowsStaticDataPath)

@@ -4,9 +4,9 @@ using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Input;
+using Code.Services.Input.DeadZone;
 using Code.Services.StaticData;
 using Code.StaticData.CubeData;
-using Code.UI.Game;
 using UnityEngine;
 
 namespace Code.Services.CubeInput
@@ -27,19 +27,22 @@ namespace Code.Services.CubeInput
         private readonly ISoundService _soundService;
         private readonly IVibrationService _vibrationService;
         private readonly IUIFactory _uiFactory;
+        private readonly IInputDeadZoneService _deadZoneService;
 
         public CubeInputService(
             IInputService inputService, 
             IStaticDataService staticDataService,
             ISoundService soundService,
             IVibrationService vibrationService,
-            IUIFactory uiFactory)
+            IUIFactory uiFactory,
+            IInputDeadZoneService deadZoneService)
         {
             _inputService = inputService;
             _staticDataService = staticDataService;
             _soundService = soundService;
             _vibrationService = vibrationService;
             _uiFactory = uiFactory;
+            _deadZoneService = deadZoneService;
         }
 
         public event Action PushedCubeEvent;
@@ -84,6 +87,10 @@ namespace Code.Services.CubeInput
         
         private void OnPointerDown()
         {
+            Vector3 touchPosition = _inputService.TouchPosition;
+            if (!_deadZoneService.CanTouch(touchPosition))
+                return;
+            
             _isPressed = true;
             _isFirstTick = true;
             
@@ -93,6 +100,10 @@ namespace Code.Services.CubeInput
         
         private void OnPointerUp()
         {
+            Vector3 touchPosition = _inputService.TouchPosition;
+            if (!_deadZoneService.CanTouch(touchPosition))
+                return;
+            
             _isPressed = false;
             
             PushCube();

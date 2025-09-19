@@ -15,6 +15,7 @@ namespace Code.Services.Factories
         public const string CubeConfigPath = "StaticData/Cubes/CubeConfig";
         public const string CubeColorConfigPath = "StaticData/Cubes/CubeColorConfig";
         public const string CubeSpawnConfigPath = "StaticData/Cubes/CubeSpawnConfig";
+        public const string DeadZoneConfigPath = "StaticData/Input/DeadZoneConfig";
 
         public const string CubePath = "Cubes/Cube";
         public const string ExplosionParticlePath = "Particles/ParticalHolder";

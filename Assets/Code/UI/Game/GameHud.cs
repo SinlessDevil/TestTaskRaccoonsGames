@@ -8,8 +8,7 @@ namespace Code.UI.Game
 {
     public class GameHud : MonoBehaviour
     {
-        [Space(10)] [Header("Other")]
-        [SerializeField] private InputZona _inputZona;
+        [Space(10)] 
         [SerializeField] private List<GameObject> _debugObjects;
         
         private IStaticDataService _staticDataService; 
@@ -19,8 +18,6 @@ namespace Code.UI.Game
         {
             _staticDataService = staticDataService;
         }
-        
-        public InputZona InputZona => _inputZona;
         
         public void Initialize()
         {
@@ -42,13 +39,13 @@ namespace Code.UI.Game
 
         private static void TrySetUpEventSystem()
         {
-            var eventSystem = FindObjectOfType<EventSystem>();
-            if (eventSystem == null)
-            {
-                var gameObjectEventSystem = new GameObject("EventSystem");
-                gameObjectEventSystem.AddComponent<EventSystem>();
-                gameObjectEventSystem.AddComponent<StandaloneInputModule>();
-            }
+            EventSystem eventSystem = FindObjectOfType<EventSystem>();
+            if (eventSystem != null) 
+                return;
+            
+            GameObject gameObjectEventSystem = new GameObject("EventSystem");
+            gameObjectEventSystem.AddComponent<EventSystem>();
+            gameObjectEventSystem.AddComponent<StandaloneInputModule>();
         }
     }
 }

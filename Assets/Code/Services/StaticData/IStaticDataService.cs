@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Code.StaticData;
 using Code.StaticData.CubeData;
+using Code.StaticData.Input;
 using Code.StaticData.Levels;
 using Code.Window;
 
@@ -13,6 +14,7 @@ namespace Code.Services.StaticData
         CubeStaticData CubeStaticData { get; }
         CubeColorStaticData CubeColorStaticData { get; }
         CubeSpawnStaticData CubeSpawnStaticData { get; }
+        DeadZoneStaticData DeadZoneConfig { get; }
         List<ChapterStaticData> Chapters { get; }
         void LoadData();
         WindowConfig ForWindow(WindowTypeId windowTypeId);

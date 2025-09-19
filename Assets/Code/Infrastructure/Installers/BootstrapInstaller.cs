@@ -16,6 +16,7 @@ using Code.Services.Finish;
 using Code.Services.Finish.Lose;
 using Code.Services.Finish.Win;
 using Code.Services.Input;
+using Code.Services.Input.DeadZone;
 using Code.Services.Levels;
 using Code.Services.LocalProgress;
 using Code.Services.PersistenceProgress;
@@ -95,6 +96,7 @@ namespace Code.Infrastructure.Installers
         private void BindInputsServices()
         {
             Container.BindInterfacesTo<InputService>().AsSingle();
+            Container.BindInterfacesTo<InputDeadZoneService>().AsSingle();
             Container.BindInterfacesTo<CubeInputService>().AsSingle();
         }
 
