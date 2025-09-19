@@ -36,7 +36,7 @@ namespace Code.Window.Setting
             _soundService.PlaySound(Sound2DType.Click);
             _timeService.Pause();
 
-            var prefab = _windowService.Open(WindowTypeId.Setting);
+            RectTransform prefab = _windowService.Open(WindowTypeId.Setting);
             _settingWindow = prefab.GetComponent<SettingWindow>();
             
             _settingWindow.UpdateWindow();

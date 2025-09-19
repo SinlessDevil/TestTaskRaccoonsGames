@@ -1,16 +1,20 @@
+using System;
 using Code.Logic.Cubes;
 using Code.Logic.Particles;
 using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.Vibration;
+using Code.Services.Factories.UIFactory;
 using Code.Services.Providers;
 using Code.Services.StaticData;
 using Code.StaticData.CubeData;
+using Code.UI.Game;
 using UnityEngine;
 
 namespace Code.Services.CubeMerge
 {
     public class CubeMergeService : ICubeMergeService
     {
+        public event Action<int> CubeMergedEvent;
         private readonly IPoolProvider<Cube> _cubePoolProvider;
         private readonly IPoolProvider<ParticleHolder> _particlePoolProvider;
         private readonly IStaticDataService _staticDataService;
@@ -49,7 +53,9 @@ namespace Code.Services.CubeMerge
             
             ApplyMergePhysics(newCube);
             
-            PlayExplosionEffect(mergePosition,newColor);
+            CubeMergedEvent?.Invoke(newValue);
+            
+            PlayExplosionEffect(mergePosition, newColor);
             _soundService.PlaySound(Sound2DType.Merge);
             _vibrationService.Play(VibrationType.SuccessPreset);
         }
@@ -85,14 +91,7 @@ namespace Code.Services.CubeMerge
         private void PlayExplosionEffect(Vector3 position, Color color)
         {
             ParticleHolder explosionParticle = _particlePoolProvider.Get(position, Quaternion.identity);
-            
-            // Option 1: Simple color
             explosionParticle.PlayMerge(color);
-            
-            // Option 2: Color with custom alpha (commented out)
-            // explosionParticle.SetParticleColorWithAlpha(color, 0.8f);
-            // explosionParticle.gameObject.SetActive(true);
-            // explosionParticle._mergeParticleSystem.Play();
         }
 
         private CubeStaticData CubeStaticData => _staticDataService.CubeStaticData;

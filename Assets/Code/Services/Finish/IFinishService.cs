@@ -4,5 +4,7 @@ namespace Code.Services.Finish
     {
         public void Win();
         public void Lose();
+        void Initialize();
+        void Cleanup();
     }   
 }

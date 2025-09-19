@@ -7,7 +7,7 @@ namespace Code.Services.CubeInput
     {
         event Action PushedCubeEvent;
         void Enable();
-        void Cleanup();
+        void Disable();
         void SetCube(Cube cube);
     }
 }

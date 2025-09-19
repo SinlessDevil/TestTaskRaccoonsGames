@@ -777,7 +777,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!114 &5458433530186804480
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -790,10 +790,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f4c5c78a99af80438521d3b1f26fd99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _typeLevelDisplayer: {fileID: 0}
-  _levelDisplayer: {fileID: 0}
-  _scoreDisplayer: {fileID: 0}
-  _timeDisplayer: {fileID: 0}
   _inputZona: {fileID: 1845956120257999870}
   _debugObjects:
   - {fileID: 990411711326399318}

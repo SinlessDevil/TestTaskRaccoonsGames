@@ -2,12 +2,14 @@ using Code.Logic.Cubes;
 using Code.Logic.Particles;
 using Code.Services.CubeCoordinator;
 using Code.Services.CubeInput;
+using Code.Services.Finish;
 using Code.Services.Input;
 using Code.Services.Input.Device;
 using Code.Services.Levels;
 using Code.Services.LocalProgress;
 using Code.Services.Providers;
 using Code.Services.Timer;
+using Code.Services.Finish;
 
 namespace Code.Infrastructure.StateMachine.Game.States
 {
@@ -22,6 +24,7 @@ namespace Code.Infrastructure.StateMachine.Game.States
         private readonly IPoolProvider<Cube> _cubeProvider;
         private readonly IPoolProvider<ParticleHolder> _particleHolderProvider;
         private readonly ICubeCoordinatorService _cubeCoordinatorService;
+        private readonly IFinishService _finishService;
 
         public GameLoopState(
             IStateMachine<IGameState> gameStateMachine, 
@@ -32,7 +35,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
             ICubeInputService cubeInputService,
             IPoolProvider<Cube> cubeProvider,
             IPoolProvider<ParticleHolder> particleHolderProvider,
-            ICubeCoordinatorService cubeCoordinatorService)
+            ICubeCoordinatorService cubeCoordinatorService,
+            IFinishService finishService)
         {
             _gameStateMachine = gameStateMachine;
             _levelService = levelService;
@@ -43,11 +47,13 @@ namespace Code.Infrastructure.StateMachine.Game.States
             _cubeProvider = cubeProvider;
             _particleHolderProvider = particleHolderProvider;
             _cubeCoordinatorService = cubeCoordinatorService;
+            _finishService = finishService;
         }
         
         public void Enter()
         {
             _cubeCoordinatorService.Initialize();
+            _finishService.Initialize();
             
             InitPools();
 
@@ -74,11 +80,12 @@ namespace Code.Infrastructure.StateMachine.Game.States
         public void Exit()
         {
             _cubeCoordinatorService.Dispose();
+            _finishService.Cleanup();
             
             _particleHolderProvider.CleanupPool();
             _cubeProvider.CleanupPool();
             
-            _cubeInputService.Cleanup();
+            _cubeInputService.Disable();
             _inputService.Cleanup();
             
             _levelService.Cleanup();

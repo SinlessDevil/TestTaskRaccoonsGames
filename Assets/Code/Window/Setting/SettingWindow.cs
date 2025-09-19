@@ -4,6 +4,7 @@ using Code.Infrastructure.StateMachine.Game.States;
 using Code.Services.AudioVibrationFX.Music;
 using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.Vibration;
+using Code.Services.Input;
 using Code.Services.PersistenceProgress;
 using Code.Services.PersistenceProgress.Player;
 using Code.Services.StaticData;
@@ -40,6 +41,7 @@ namespace Code.Window.Setting
         private IMusicService _musicService;
         private ISoundService _soundService;
         private IVibrationService _vibrationService;
+        private IInputService _inputService;
 
         [Inject]
         public void Constructor(
@@ -49,7 +51,8 @@ namespace Code.Window.Setting
             IStateMachine<IGameState> gameStateMachine,
             ISoundService soundService, 
             IMusicService musicService,
-            IVibrationService vibrationService)
+            IVibrationService vibrationService,
+            IInputService inputService)
         {
             _timeService = timeService;
             _staticDataService = staticDataService;
@@ -57,6 +60,7 @@ namespace Code.Window.Setting
             _soundService = soundService;
             _musicService = musicService;
             _vibrationService = vibrationService;
+            _inputService = inputService;
             
             _playerSettings = progressService.PlayerData.PlayerSettings;
         }
