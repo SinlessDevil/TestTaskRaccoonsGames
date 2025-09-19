@@ -643,7 +643,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000016212, y: 0.00010681}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 72.8661, y: 72.8661}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!95 &9187895899122895447
@@ -727,7 +727,7 @@ MonoBehaviour:
   _arrowMoveSpeed: 3
   _fillAnimationSpeed: 2
   _fillColor: {r: 1, g: 0.52156866, b: 0, a: 1}
-  _arrowYOffset: 0
+  _arrowOffset: {x: 20, y: 5}
 --- !u!1 &5900182609182095567
 GameObject:
   m_ObjectHideFlags: 0

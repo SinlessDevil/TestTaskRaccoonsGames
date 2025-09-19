@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Code.Services.Levels;
 using Code.Services.PersistenceProgress;
 using Code.Services.PersistenceProgress.Player;
@@ -6,12 +7,15 @@ using Code.Services.Timer;
 using Code.Services.Window;
 using Code.Window;
 using Code.Window.Finish.Win;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Code.Services.Finish.Win
 {
     public class WinService : IWinService
     {
+        private const int DelayToShowWindow = 500;
+        
         private readonly IWindowService _windowService;
         private readonly ILevelService _levelService;
         private readonly ISaveLoadFacade _saveLoadFacade;
@@ -41,6 +45,13 @@ namespace Code.Services.Finish.Win
             SetRecordText();
             
             SaveProgress();
+
+            ShowWindow().Forget();
+        }
+
+        private async UniTask ShowWindow()
+        {
+            await Task.Delay(DelayToShowWindow);
             
             RectTransform window = _windowService.Open(WindowTypeId.Win);
             WinWindow winWindow = window.GetComponent<WinWindow>();

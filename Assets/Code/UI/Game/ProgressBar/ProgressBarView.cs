@@ -12,20 +12,12 @@ namespace Code.UI.Game.ProgressBar
         [SerializeField] private Transform _pointsContainer;
         [Header("Point Prefab")]
         [SerializeField] private PointView _pointPrefab;
-        [Header("Animation Settings")]
-        [SerializeField] private float _arrowMoveSpeed = 3f;
-        [SerializeField] private float _fillAnimationSpeed = 2f;
         [Header("Visual Settings")]
         [SerializeField] private Color _fillColor = Color.blue;
-        [SerializeField] private float _arrowYOffset = 20f;
+        [SerializeField] private Vector2 _arrowOffset;
         
         private ProgressBarPM _progressBarPM;
         private List<PointView> _pointViews = new();
-        
-        private float _targetFillAmount;
-        private float _targetArrowPosition;
-        private bool _isAnimatingFill;
-        private bool _isAnimatingArrow;
         
         public void Initialize(ProgressBarPM progressBarPM)
         {
@@ -34,8 +26,6 @@ namespace Code.UI.Game.ProgressBar
             SubscribeToEvents();
             SetupInitialVisuals();
             CreatePointViews();
-            
-            Debug.Log("[ProgressBarView] Initialized with PM");
         }
         
         public void Cleanup()
@@ -104,9 +94,7 @@ namespace Code.UI.Game.ProgressBar
         
         private void OnProgressUpdated(float progress)
         {
-            _targetFillAmount = progress;
-            _isAnimatingFill = true;
-            
+            _fillImage.fillAmount = progress;
             UpdateArrowPosition(progress);
         }
         
@@ -122,14 +110,13 @@ namespace Code.UI.Game.ProgressBar
         
         private void UpdateArrowPosition(float progress)
         {
-            if (_arrowTransform == null) 
-                return;
-            
             RectTransform barRect = GetComponent<RectTransform>();
             float barWidth = barRect.rect.width;
             
-            _targetArrowPosition = Mathf.Lerp(-barWidth * 0.5f, barWidth * 0.5f, progress);
-            _isAnimatingArrow = true;
+            float targetX = Mathf.Lerp(-barWidth * 0.5f, barWidth * 0.5f, progress);
+            Vector2 finalPosition = new Vector2(targetX, 0f) + _arrowOffset;
+            
+            _arrowTransform.anchoredPosition = finalPosition;
         }
         
         private void UpdatePointsAchievement()
@@ -145,42 +132,5 @@ namespace Code.UI.Game.ProgressBar
             }
         }
         
-        private void Update()
-        {
-            AnimateFill();
-            AnimateArrow();
-        }
-        
-        private void AnimateFill()
-        {
-            if (_isAnimatingFill && _fillImage != null)
-            {
-                float currentFill = _fillImage.fillAmount;
-                float newFill = Mathf.MoveTowards(currentFill, _targetFillAmount, _fillAnimationSpeed * Time.deltaTime);
-                
-                _fillImage.fillAmount = newFill;
-                
-                if (Mathf.Approximately(newFill, _targetFillAmount))
-                {
-                    _isAnimatingFill = false;
-                }
-            }
-        }
-        
-        private void AnimateArrow()
-        {
-            if (_isAnimatingArrow && _arrowTransform != null)
-            {
-                Vector2 currentPos = _arrowTransform.anchoredPosition;
-                float newX = Mathf.MoveTowards(currentPos.x, _targetArrowPosition, _arrowMoveSpeed * 100f * Time.deltaTime);
-                
-                _arrowTransform.anchoredPosition = new Vector2(newX, currentPos.y + _arrowYOffset);
-                
-                if (Mathf.Approximately(newX, _targetArrowPosition))
-                {
-                    _isAnimatingArrow = false;
-                }
-            }
-        }
     }
 }
