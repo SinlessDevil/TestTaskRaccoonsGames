@@ -1,3 +1,4 @@
+using Code.Services.CubeMerge;
 using UnityEngine;
 using Zenject;
 
@@ -10,6 +11,9 @@ namespace Code.Logic.Cubes
         [SerializeField] private CubeAnimator _cubeAnimator;
         [SerializeField] private CubeColliderDetector _cubeColliderDetector;
         [SerializeField] private CubeView _cubeView;
+
+        private ICubeMergeService _cubeMergeService;
+        private bool _isBeingMerged = false;
 
         public void OnValidate()
         {
@@ -27,9 +31,9 @@ namespace Code.Logic.Cubes
         }
         
         [Inject]
-        public void Constructor()
+        public void Constructor(ICubeMergeService cubeMergeService)
         {
-            
+            _cubeMergeService = cubeMergeService;
         }
 
         public Rigidbody Rigidbody => _rigidbody;
@@ -40,6 +44,7 @@ namespace Code.Logic.Cubes
         public void Initialize(int value)
         {
             Value = value;
+            _isBeingMerged = false;
         }
         
         public void Enable()
@@ -62,7 +67,18 @@ namespace Code.Logic.Cubes
 
         private void OnDetectedCubeEvent(Cube targetCube)
         {
-            
+            // Проверяем, можно ли объединить кубы (одинаковые значения и не в процессе слияния)
+            if (_cubeMergeService != null && 
+                Value == targetCube.Value && 
+                !_isBeingMerged && 
+                !targetCube._isBeingMerged)
+            {
+                // Устанавливаем флаги слияния для предотвращения повторных слияний
+                _isBeingMerged = true;
+                targetCube._isBeingMerged = true;
+                
+                _cubeMergeService.MergeCubes(this, targetCube);
+            }
         }
     }
 }

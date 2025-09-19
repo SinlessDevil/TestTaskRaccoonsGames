@@ -8,6 +8,7 @@ using Code.Services.AudioVibrationFX.StaticData;
 using Code.Services.AudioVibrationFX.Vibration;
 using Code.Services.CubeCoordinator;
 using Code.Services.CubeInput;
+using Code.Services.CubeMerge;
 using Code.Services.Factories.Game;
 using Code.Services.Factories.UIFactory;
 using Code.Services.Finish;
@@ -72,6 +73,7 @@ namespace Code.Infrastructure.Installers
             Container.BindInterfacesTo<TimeService>().AsSingle();
 
             Container.BindInterfacesTo<CubeCoordinatorService>().AsSingle();
+            Container.BindInterfacesTo<CubeMergeService>().AsSingle();
             
             BindDataServices();
             BindAudioVibrationService();

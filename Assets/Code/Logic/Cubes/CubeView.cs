@@ -11,7 +11,9 @@ namespace Code.Logic.Cubes
 
         public void Initialize(int value, Color color)
         {
-            _texts.Find(x => x.text == value.ToString());
+            foreach (TMP_Text tmpText in _texts) 
+                tmpText.text = value.ToString();
+            
             _meshRenderer.material.color = color;
         }
     }
