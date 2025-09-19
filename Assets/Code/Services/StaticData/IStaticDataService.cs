@@ -10,7 +10,9 @@ namespace Code.Services.StaticData
     {
         GameStaticData GameConfig { get; }
         BalanceStaticData Balance { get; }
-        CubeStaticData CubeConfig { get; }
+        CubeStaticData CubeStaticData { get; }
+        CubeColorStaticData CubeColorStaticData { get; }
+        CubeSpawnStaticData CubeSpawnStaticData { get; }
         List<ChapterStaticData> Chapters { get; }
         void LoadData();
         WindowConfig ForWindow(WindowTypeId windowTypeId);

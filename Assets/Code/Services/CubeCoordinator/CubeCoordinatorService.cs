@@ -1,13 +1,13 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Code.Logic.Cubes;
 using Code.Services.CubeInput;
 using Code.Services.Providers;
 using Code.Services.StaticData;
 using Code.StaticData.CubeData;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Cysharp.Threading.Tasks;
 
 namespace Code.Services.CubeCoordinator
 {
@@ -31,7 +31,7 @@ namespace Code.Services.CubeCoordinator
 
         public void Initialize()
         {
-            OnGetCubeAsync(0);
+            OnGetCubeAsync((int)(SpawnConfig.InitialSpawnDelay * 1000));
             
             _cubeInputService.PushedCubeEvent += OnGetCube;
         }
@@ -45,17 +45,17 @@ namespace Code.Services.CubeCoordinator
 
         private void OnGetCube()
         {
-            OnGetCubeAsync(300);
+            OnGetCubeAsync((int)(SpawnConfig.SpawnDelay * 1000));
         }
         
         private async UniTask OnGetCubeAsync(int delay)
         {
             await Task.Delay(delay);
             
-            Cube cube =_poolProvider.Get(Vector3.zero,Quaternion.identity, null);
+            Cube cube = _poolProvider.Get(SpawnConfig.SpawnPosition, Quaternion.identity, null);
 
             int value = GetRandomValue();
-            Color color = GetCubeStaticData.GetColorForValue(value);
+            Color color = _staticDataService.CubeColorStaticData.GetColorForValue(value);
             
             cube.Initialize(value);
             cube.CubeView.Initialize(value, color);
@@ -66,7 +66,7 @@ namespace Code.Services.CubeCoordinator
         
         private int GetRandomValue()
         {
-            List<CubeSpawnChance> spawnChances = GetCubeStaticData.SpawnChances;
+            List<CubeSpawnChance> spawnChances = _staticDataService.CubeSpawnStaticData.SpawnChances;
             
             if (spawnChances == null || spawnChances.Count == 0)
             {
@@ -88,6 +88,6 @@ namespace Code.Services.CubeCoordinator
             return spawnChances[0].Value;
         }
         
-        private CubeStaticData GetCubeStaticData => _staticDataService.CubeConfig;
+        private CubeSpawnStaticData SpawnConfig => _staticDataService.CubeSpawnStaticData;
     }
 }

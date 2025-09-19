@@ -1,6 +1,7 @@
 using System;
 using Code.Logic.Cubes;
 using Code.Services.Input;
+using Code.Services.StaticData;
 using UnityEngine;
 
 namespace Code.Services.CubeInput
@@ -9,11 +10,11 @@ namespace Code.Services.CubeInput
     {
         private Cube _cube;
         
-        private float _leftPosition = -12.5f;
-        private float _rightPosition = 12f;
-        private float _smoothSpeed = 8f;
-        private float _pushForce = 65f;
-        private Vector3 _pushDirection = Vector3.forward;
+        private float _leftPosition;
+        private float _rightPosition;
+        private float _smoothSpeed;
+        private float _pushForce;
+        private Vector3 _pushDirection;
         
         private Vector2 _startTouchPosition;
         private Vector3 _targetPosition;
@@ -23,10 +24,24 @@ namespace Code.Services.CubeInput
         private bool _isPressed;
         
         private readonly IInputService _inputService;
+        private readonly IStaticDataService _staticDataService;
         
-        public CubeInputService(IInputService inputService)
+        public CubeInputService(IInputService inputService, IStaticDataService staticDataService)
         {
             _inputService = inputService;
+            _staticDataService = staticDataService;
+            
+            InitializeFromStaticData();
+        }
+        
+        private void InitializeFromStaticData()
+        {
+            var cubeConfig = _staticDataService.CubeStaticData;
+            _leftPosition = cubeConfig.InputLeftBoundary;
+            _rightPosition = cubeConfig.InputRightBoundary;
+            _smoothSpeed = cubeConfig.InputSmoothSpeed;
+            _pushForce = cubeConfig.InputPushForce;
+            _pushDirection = cubeConfig.InputPushDirection;
         }
 
         public event Action PushedCubeEvent;

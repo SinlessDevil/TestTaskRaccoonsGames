@@ -31,7 +31,7 @@ namespace Code.Services.CubeMerge
             _cubePoolProvider.Return(targetCube);
             
             Cube newCube = _cubePoolProvider.Get(mergePosition, Quaternion.identity, null);
-            Color newColor = GetCubeStaticData.GetColorForValue(newValue);
+            Color newColor = _staticDataService.CubeColorStaticData.GetColorForValue(newValue);
             newCube.Initialize(newValue);
             newCube.CubeView.Initialize(newValue, newColor);
             
@@ -50,22 +50,22 @@ namespace Code.Services.CubeMerge
             newCube.Rigidbody.velocity = Vector3.zero;
             newCube.Rigidbody.angularVelocity = Vector3.zero;
             
-            float pushForce = 25f;
-            newCube.Rigidbody.AddForce(new Vector3(0, 0.7f, 0.7f) * pushForce, ForceMode.Impulse);
+            newCube.Rigidbody.AddForce(CubeStaticData.MergePushDirection * CubeStaticData.MergePushForce, ForceMode.Impulse);
             
-            float randomValue = UnityEngine.Random.Range(0f, 1f) > 0.5f ? UnityEngine.Random.Range(-20f, -10f) : 
-                UnityEngine.Random.Range(10f, 20f);
+            float randomValue = UnityEngine.Random.Range(0f, 1f) > 0.5f 
+                ? UnityEngine.Random.Range(CubeStaticData.MergeRandomForceMin, CubeStaticData.MergeRandomForceMax) 
+                : UnityEngine.Random.Range(CubeStaticData.MergeRandomForcePositiveMin, CubeStaticData.MergeRandomForcePositiveMax);
             Vector3 randomDirection = Vector3.one * randomValue;
             newCube.Rigidbody.AddForce(randomDirection);
             
             Vector3 randomTorque = new Vector3(
-                UnityEngine.Random.Range(-5f, 5f),
-                UnityEngine.Random.Range(-5f, 5f),
-                UnityEngine.Random.Range(-5f, 5f)
+                UnityEngine.Random.Range(CubeStaticData.MergeTorqueMin, CubeStaticData.MergeTorqueMax),
+                UnityEngine.Random.Range(CubeStaticData.MergeTorqueMin, CubeStaticData.MergeTorqueMax),
+                UnityEngine.Random.Range(CubeStaticData.MergeTorqueMin, CubeStaticData.MergeTorqueMax)
             );
             newCube.Rigidbody.AddTorque(randomTorque, ForceMode.Impulse);
         }
 
-        private CubeStaticData GetCubeStaticData => _staticDataService.CubeConfig;
+        private CubeStaticData CubeStaticData => _staticDataService.CubeStaticData;
     }
 }

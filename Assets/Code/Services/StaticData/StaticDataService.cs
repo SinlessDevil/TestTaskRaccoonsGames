@@ -15,12 +15,16 @@ namespace Code.Services.StaticData
         private GameStaticData _gameStaticData;
         private BalanceStaticData _balanceStaticData;
         private CubeStaticData _cubeStaticData;
+        private CubeColorStaticData _cubeColorStaticData;
+        private CubeSpawnStaticData _cubeSpawnStaticData;
         private Dictionary<WindowTypeId, WindowConfig> _windowConfigs;
         private List<ChapterStaticData> _chapterStaticDatas = new();
         
         public GameStaticData GameConfig => _gameStaticData;
         public BalanceStaticData Balance => _balanceStaticData;
-        public CubeStaticData CubeConfig => _cubeStaticData;
+        public CubeStaticData CubeStaticData => _cubeStaticData;
+        public CubeColorStaticData CubeColorStaticData => _cubeColorStaticData;
+        public CubeSpawnStaticData CubeSpawnStaticData => _cubeSpawnStaticData;
         public List<ChapterStaticData> Chapters => _chapterStaticDatas;
         
         public void LoadData()
@@ -33,6 +37,12 @@ namespace Code.Services.StaticData
             
             _cubeStaticData = Resources
                 .Load<CubeStaticData>(ResourcePath.CubeConfigPath);
+            
+            _cubeColorStaticData = Resources
+                .Load<CubeColorStaticData>(ResourcePath.CubeColorConfigPath);
+            
+            _cubeSpawnStaticData = Resources
+                .Load<CubeSpawnStaticData>(ResourcePath.CubeSpawnConfigPath);
             
             _windowConfigs = Resources
                 .Load<WindowStaticData>(ResourcePath.WindowsStaticDataPath)
