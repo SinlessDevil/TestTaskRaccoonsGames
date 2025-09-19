@@ -1,4 +1,5 @@
 using Code.Logic.Cubes;
+using Code.Logic.Particles;
 using Code.Services.Providers;
 using Code.Services.StaticData;
 using Code.StaticData.CubeData;
@@ -9,13 +10,16 @@ namespace Code.Services.CubeMerge
     public class CubeMergeService : ICubeMergeService
     {
         private readonly IPoolProvider<Cube> _cubePoolProvider;
+        private readonly IPoolProvider<ParticleHolder> _particlePoolProvider;
         private readonly IStaticDataService _staticDataService;
 
         public CubeMergeService(
             IPoolProvider<Cube> cubePoolProvider,
+            IPoolProvider<ParticleHolder> particlePoolProvider,
             IStaticDataService staticDataService)
         {
             _cubePoolProvider = cubePoolProvider;
+            _particlePoolProvider = particlePoolProvider;
             _staticDataService = staticDataService;
         }
 
@@ -36,6 +40,8 @@ namespace Code.Services.CubeMerge
             newCube.CubeView.Initialize(newValue, newColor);
             
             ApplyMergePhysics(newCube);
+            
+            PlayExplosionEffect(mergePosition,newColor);
         }
 
         private Vector3 CalculateMergePosition(Cube currentCube, Cube targetCube)
@@ -64,6 +70,19 @@ namespace Code.Services.CubeMerge
                 UnityEngine.Random.Range(CubeStaticData.MergeTorqueMin, CubeStaticData.MergeTorqueMax)
             );
             newCube.Rigidbody.AddTorque(randomTorque, ForceMode.Impulse);
+        }
+
+        private void PlayExplosionEffect(Vector3 position, Color color)
+        {
+            ParticleHolder explosionParticle = _particlePoolProvider.Get(position, Quaternion.identity);
+            
+            // Option 1: Simple color
+            explosionParticle.PlayMerge(color);
+            
+            // Option 2: Color with custom alpha (commented out)
+            // explosionParticle.SetParticleColorWithAlpha(color, 0.8f);
+            // explosionParticle.gameObject.SetActive(true);
+            // explosionParticle._mergeParticleSystem.Play();
         }
 
         private CubeStaticData CubeStaticData => _staticDataService.CubeStaticData;

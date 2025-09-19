@@ -2,6 +2,7 @@ using Code.Infrastructure.StateMachine;
 using Code.Infrastructure.StateMachine.Game;
 using Code.Infrastructure.StateMachine.Game.States;
 using Code.Logic.Cubes;
+using Code.Logic.Particles;
 using Code.Services.AudioVibrationFX.Music;
 using Code.Services.AudioVibrationFX.Sound;
 using Code.Services.AudioVibrationFX.StaticData;
@@ -20,6 +21,7 @@ using Code.Services.LocalProgress;
 using Code.Services.PersistenceProgress;
 using Code.Services.Providers;
 using Code.Services.Providers.Cubes;
+using Code.Services.Providers.Particles;
 using Code.Services.Providers.Widgets;
 using Code.Services.Random;
 using Code.Services.SaveLoad;
@@ -85,11 +87,11 @@ namespace Code.Infrastructure.Installers
             Container.BindInterfacesTo<UIFactory>().AsSingle();
             Container.BindInterfacesTo<GameFactory>().AsSingle();
             
-            Container.Bind<IPoolFactory<Widget>>().To<WidgetFactory>().AsSingle();
-            Container.Bind<IPoolProvider<Widget>>().To<WidgetProvider>().AsSingle();
-            
             Container.Bind<IPoolFactory<Cube>>().To<CubeFactory>().AsSingle();
             Container.Bind<IPoolProvider<Cube>>().To<CubeProvider>().AsSingle();
+            
+            Container.Bind<IPoolFactory<ParticleHolder>>().To<CubeParticleFactory>().AsSingle();
+            Container.Bind<IPoolProvider<ParticleHolder>>().To<CubeParticleProvider>().AsSingle();
         }
 
         private void BindInputsServices()

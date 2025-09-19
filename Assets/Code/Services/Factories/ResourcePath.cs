@@ -17,5 +17,6 @@ namespace Code.Services.Factories
         public const string CubeSpawnConfigPath = "StaticData/Cubes/CubeSpawnConfig";
 
         public const string CubePath = "Cubes/Cube";
+        public const string ExplosionParticlePath = "Particles/ParticalHolder";
     }
 }

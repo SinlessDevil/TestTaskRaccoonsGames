@@ -1,4 +1,5 @@
 using Code.Logic.Cubes;
+using Code.Logic.Particles;
 using Code.Services.CubeCoordinator;
 using Code.Services.CubeInput;
 using Code.Services.Input;
@@ -19,8 +20,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
         private readonly ILevelLocalProgressService _levelLocalProgressService;
         private readonly ITimeService _timeService;
         private readonly ICubeInputService _cubeInputService;
-        private readonly IPoolProvider<Widget> _widgetProvider;
         private readonly IPoolProvider<Cube> _cubeProvider;
+        private readonly IPoolProvider<ParticleHolder> _particleHolderProvider;
         private readonly ICubeCoordinatorService _cubeCoordinatorService;
 
         public GameLoopState(
@@ -30,8 +31,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
             ITimeService timeService,
             IInputService inputService,
             ICubeInputService cubeInputService,
-            IPoolProvider<Widget> widgetProvider,
             IPoolProvider<Cube> cubeProvider,
+            IPoolProvider<ParticleHolder> particleHolderProvider,
             ICubeCoordinatorService cubeCoordinatorService)
         {
             _gameStateMachine = gameStateMachine;
@@ -40,8 +41,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
             _timeService = timeService;
             _inputService = inputService;
             _cubeInputService = cubeInputService;
-            _widgetProvider = widgetProvider;
             _cubeProvider = cubeProvider;
+            _particleHolderProvider = particleHolderProvider;
             _cubeCoordinatorService = cubeCoordinatorService;
         }
         
@@ -56,7 +57,7 @@ namespace Code.Infrastructure.StateMachine.Game.States
 
         private void InitPools()
         {
-            _widgetProvider.CreatePool();
+            _particleHolderProvider.CreatePool();
             _cubeProvider.CreatePool();
         }
         
@@ -75,7 +76,7 @@ namespace Code.Infrastructure.StateMachine.Game.States
         {
             _cubeCoordinatorService.Dispose();
             
-            _widgetProvider.CleanupPool();
+            _particleHolderProvider.CleanupPool();
             _cubeProvider.CleanupPool();
             
             _cubeInputService.Cleanup();
