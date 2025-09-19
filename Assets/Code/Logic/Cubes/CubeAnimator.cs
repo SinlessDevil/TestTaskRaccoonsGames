@@ -9,7 +9,7 @@ namespace Code.Logic.Cubes
         {
             transform.localScale = Vector3.zero;
             
-            transform.DOScale(Vector3.one, 0.5f)
+            transform.DOScale(Vector3.one, 0.25f)
                 .SetEase(Ease.OutBounce);
         }
     }

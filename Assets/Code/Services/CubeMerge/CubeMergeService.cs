@@ -34,7 +34,6 @@ namespace Code.Services.CubeMerge
             Color newColor = GetCubeStaticData.GetColorForValue(newValue);
             newCube.Initialize(newValue);
             newCube.CubeView.Initialize(newValue, newColor);
-            newCube.CubeAnimator.PlaySpawn();
             
             ApplyMergePhysics(newCube);
         }
@@ -51,10 +50,11 @@ namespace Code.Services.CubeMerge
             newCube.Rigidbody.velocity = Vector3.zero;
             newCube.Rigidbody.angularVelocity = Vector3.zero;
             
-            float pushForce = 2.5f;
-            newCube.Rigidbody.AddForce(new Vector3(0, 0.3f, 1f) * pushForce, ForceMode.Impulse);
+            float pushForce = 25f;
+            newCube.Rigidbody.AddForce(new Vector3(0, 0.7f, 0.7f) * pushForce, ForceMode.Impulse);
             
-            float randomValue = UnityEngine.Random.Range(-20f, 20f);
+            float randomValue = UnityEngine.Random.Range(0f, 1f) > 0.5f ? UnityEngine.Random.Range(-20f, -10f) : 
+                UnityEngine.Random.Range(10f, 20f);
             Vector3 randomDirection = Vector3.one * randomValue;
             newCube.Rigidbody.AddForce(randomDirection);
             

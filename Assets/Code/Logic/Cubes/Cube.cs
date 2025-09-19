@@ -13,7 +13,6 @@ namespace Code.Logic.Cubes
         [SerializeField] private CubeView _cubeView;
 
         private ICubeMergeService _cubeMergeService;
-        private bool _isBeingMerged = false;
 
         public void OnValidate()
         {
@@ -44,14 +43,13 @@ namespace Code.Logic.Cubes
         public void Initialize(int value)
         {
             Value = value;
-            _isBeingMerged = false;
         }
         
         public void Enable()
         {
-            gameObject.SetActive(true);
+            _rigidbody.velocity = Vector3.zero;
             
-            Rigidbody.isKinematic = false;
+            gameObject.SetActive(true);
 
             _cubeColliderDetector.DetectedCubeEvent += OnDetectedCubeEvent;
         }
@@ -59,26 +57,13 @@ namespace Code.Logic.Cubes
         public void Disable()
         {
             gameObject.SetActive(false);
-            
-            Rigidbody.isKinematic = true;
 
             _cubeColliderDetector.DetectedCubeEvent -= OnDetectedCubeEvent;
         }
 
         private void OnDetectedCubeEvent(Cube targetCube)
         {
-            // Проверяем, можно ли объединить кубы (одинаковые значения и не в процессе слияния)
-            if (_cubeMergeService != null && 
-                Value == targetCube.Value && 
-                !_isBeingMerged && 
-                !targetCube._isBeingMerged)
-            {
-                // Устанавливаем флаги слияния для предотвращения повторных слияний
-                _isBeingMerged = true;
-                targetCube._isBeingMerged = true;
-                
-                _cubeMergeService.MergeCubes(this, targetCube);
-            }
+            _cubeMergeService.MergeCubes(this, targetCube);
         }
     }
 }

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Code.Logic.Cubes;
 using Code.Services.CubeInput;
 using Code.Services.Providers;
 using Code.Services.StaticData;
 using Code.StaticData.CubeData;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace Code.Services.CubeCoordinator
@@ -29,7 +31,7 @@ namespace Code.Services.CubeCoordinator
 
         public void Initialize()
         {
-            OnGetCube();
+            OnGetCubeAsync(0);
             
             _cubeInputService.PushedCubeEvent += OnGetCube;
         }
@@ -43,6 +45,13 @@ namespace Code.Services.CubeCoordinator
 
         private void OnGetCube()
         {
+            OnGetCubeAsync(300);
+        }
+        
+        private async UniTask OnGetCubeAsync(int delay)
+        {
+            await Task.Delay(delay);
+            
             Cube cube =_poolProvider.Get(Vector3.zero,Quaternion.identity, null);
 
             int value = GetRandomValue();
