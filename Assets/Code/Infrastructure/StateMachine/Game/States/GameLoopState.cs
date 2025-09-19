@@ -10,6 +10,7 @@ using Code.Services.LocalProgress;
 using Code.Services.Providers;
 using Code.Services.Timer;
 using Code.Logic.Triggers;
+using Code.Services.Factories.UIFactory;
 
 namespace Code.Infrastructure.StateMachine.Game.States
 {
@@ -25,6 +26,7 @@ namespace Code.Infrastructure.StateMachine.Game.States
         private readonly IPoolProvider<ParticleHolder> _particleHolderProvider;
         private readonly ICubeCoordinatorService _cubeCoordinatorService;
         private readonly IFinishService _finishService;
+        private readonly IUIFactory _uiFactory;
 
         public GameLoopState(
             IStateMachine<IGameState> gameStateMachine, 
@@ -36,7 +38,8 @@ namespace Code.Infrastructure.StateMachine.Game.States
             IPoolProvider<Cube> cubeProvider,
             IPoolProvider<ParticleHolder> particleHolderProvider,
             ICubeCoordinatorService cubeCoordinatorService,
-            IFinishService finishService)
+            IFinishService finishService,
+            IUIFactory uiFactory)
         {
             _gameStateMachine = gameStateMachine;
             _levelService = levelService;
@@ -48,6 +51,7 @@ namespace Code.Infrastructure.StateMachine.Game.States
             _particleHolderProvider = particleHolderProvider;
             _cubeCoordinatorService = cubeCoordinatorService;
             _finishService = finishService;
+            _uiFactory = uiFactory;
         }
         
         public void Enter()
@@ -97,6 +101,11 @@ namespace Code.Infrastructure.StateMachine.Game.States
             _levelLocalProgressService.Cleanup();
             
             _timeService.ResetTimer();
+
+            if (_uiFactory.GameHud != null)
+            {
+                _uiFactory.GameHud.Cleanup();
+            }
         }
     }
 }
