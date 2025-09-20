@@ -1,4 +1,4 @@
-🎮 CubeMerge 3D — TestTaskRaccoonsGames
+🎮 CubeMerge 3D — Test Task Raccoons Games
 <p align="center"> <a href="https://www.youtube.com/watch?v=4GVzAM5tUFs&t=13s" target="_blank"> <img src="https://img.youtube.com/vi/4GVzAM5tUFs/0.jpg" alt="Watch the demo" /> </a> </p> <p align="center"> <a href="https://www.youtube.com/watch?v=4GVzAM5tUFs&t=13s" target="_blank"> <img src="https://img.shields.io/badge/Watch%20on-YouTube-FF0000?style=for-the-badge&logo=youtube&logoColor=white" alt="Watch on YouTube" /> </a> </p>
 
 📝 Description
